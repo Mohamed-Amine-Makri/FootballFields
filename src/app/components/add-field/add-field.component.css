@@ -1,0 +1,45 @@
+.add-field-container {
+  background-color: #f8f9fa;
+  min-height: calc(100vh - 200px);
+}
+
+.card {
+  border-radius: 20px;
+}
+
+.form-label {
+  color: #495057;
+  font-size: 0.95rem;
+}
+
+.form-control,
+.form-select {
+  border-radius: 8px;
+  border: 2px solid #e9ecef;
+  padding: 0.6rem 1rem;
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: #667eea;
+  box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.15);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  font-weight: 600;
+}
+
+.btn-primary:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+}
+
+.badge {
+  font-size: 0.9rem;
+}
+
+.btn-close-sm {
+  font-size: 0.6rem;
+}

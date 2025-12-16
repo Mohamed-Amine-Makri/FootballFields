@@ -1,0 +1,92 @@
+<div class="profile-container py-5">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-6">
+        <div class="card shadow-lg border-0">
+          <div class="card-body p-5">
+            <div class="text-center mb-4">
+              <div class="profile-avatar mx-auto mb-3">
+                {{ user()?.firstName?.charAt(0) }}{{ user()?.lastName?.charAt(0) }}
+              </div>
+              <h2 class="fw-bold">Mon Profil</h2>
+            </div>
+
+            @if (successMessage()) {
+              <div class="alert alert-success">{{ successMessage() }}</div>
+            }
+            @if (errorMessage()) {
+              <div class="alert alert-danger">{{ errorMessage() }}</div>
+            }
+
+            <form (ngSubmit)="onSubmit()">
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">Prénom</label>
+                  <input 
+                    type="text" 
+                    class="form-control"
+                    [value]="isEditing() ? editedUser().firstName : user()?.firstName"
+                    [disabled]="!isEditing()"
+                    (input)="updateField('firstName', $event)">
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">Nom</label>
+                  <input 
+                    type="text" 
+                    class="form-control"
+                    [value]="isEditing() ? editedUser().lastName : user()?.lastName"
+                    [disabled]="!isEditing()"
+                    (input)="updateField('lastName', $event)">
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label">Email</label>
+                <input 
+                  type="email" 
+                  class="form-control"
+                  [value]="user()?.email"
+                  disabled>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label">Téléphone</label>
+                <input 
+                  type="tel" 
+                  class="form-control"
+                  [value]="isEditing() ? editedUser().phone : user()?.phone"
+                  [disabled]="!isEditing()"
+                  (input)="updateField('phone', $event)">
+              </div>
+
+              <div class="d-flex gap-2">
+                @if (!isEditing()) {
+                  <button 
+                    type="button"
+                    class="btn btn-primary flex-grow-1"
+                    (click)="toggleEdit()">
+                    Modifier
+                  </button>
+                } @else {
+                  <button 
+                    type="submit" 
+                    class="btn btn-primary flex-grow-1"
+                    [disabled]="isLoading()">
+                    Sauvegarder
+                  </button>
+                  <button 
+                    type="button"
+                    class="btn btn-outline-secondary flex-grow-1"
+                    (click)="toggleEdit()">
+                    Annuler
+                  </button>
+                }
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

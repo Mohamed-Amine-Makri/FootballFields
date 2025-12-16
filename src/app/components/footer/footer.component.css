@@ -1,0 +1,131 @@
+.footer {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  margin-top: auto;
+  color: #fff !important;
+}
+
+.footer-logo {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+}
+
+.footer-section h5,
+.footer-section h6 {
+  color: #fff;
+  position: relative;
+}
+
+.footer-section h6::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -8px;
+  width: 40px;
+  height: 2px;
+  background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+}
+
+.footer .text-muted {
+  color: #fff !important;
+}
+
+.footer a {
+  color: #fff !important;
+}
+
+.contact-info i {
+  font-size: 1rem;
+}
+
+.footer-link {
+  transition: all 0.3s ease;
+  display: inline-block;
+  color: #fff !important;
+}
+
+.footer-link:hover {
+  color: #667eea !important;
+  padding-left: 5px;
+}
+
+.social-links {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.social-link {
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  font-size: 1.2rem;
+}
+
+.social-link:hover {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+  color: #fff;
+}
+
+.input-group .form-control {
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
+}
+
+.input-group .form-control::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.input-group .form-control:focus {
+  background-color: rgba(255, 255, 255, 0.15);
+  border-color: #667eea;
+  color: #fff;
+  box-shadow: none;
+}
+
+.input-group .btn-primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+}
+
+.input-group .btn-primary:hover {
+  transform: scale(1.05);
+}
+
+hr.border-secondary {
+  opacity: 0.2;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .footer {
+    text-align: center;
+  }
+
+  .footer-section h6::after {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .social-links {
+    justify-content: center;
+  }
+
+  .contact-info {
+    text-align: center;
+  }
+
+  .contact-info .d-flex {
+    justify-content: center;
+  }
+}

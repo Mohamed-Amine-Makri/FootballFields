@@ -1,0 +1,138 @@
+<div class="field-list-container py-5">
+  <div class="container">
+    <div class="text-center mb-5">
+      <h1 class="display-4 fw-bold mb-3">
+        Nos <span class="text-primary">Terrains</span>
+      </h1>
+      <p class="lead text-muted">
+        Découvrez et réservez les meilleurs terrains de football
+      </p>
+    </div>
+
+    <div class="card shadow-sm border-0 mb-4">
+      <div class="card-body p-4">
+        <div class="row g-3">
+          <!-- Search Bar -->
+          <div class="col-md-4">
+            <label class="form-label fw-semibold">
+              <i class="bi bi-search me-2"></i>Rechercher
+            </label>
+            <input 
+              type="text" 
+              class="form-control"
+              placeholder="Nom, ville, description..."
+              [value]="searchQuery()"
+              (input)="updateSearchQuery($event)">
+          </div>
+
+          <!-- Type Filter -->
+          <div class="col-md-3">
+            <label class="form-label fw-semibold">
+              <i class="bi bi-filter me-2"></i>Type
+            </label>
+            <select 
+              class="form-select"
+              [value]="selectedType()"
+              (change)="updateTypeFilter($event)">
+              @for (type of typeOptions; track type) {
+                <option [value]="type">{{ getTypeLabel(type) }}</option>
+              }
+            </select>
+          </div>
+
+          <div class="col-md-2">
+            <label class="form-label fw-semibold">
+              <i class="bi bi-arrows-fullscreen me-2"></i>Taille
+            </label>
+            <select 
+              class="form-select"
+              [value]="selectedSize()"
+              (change)="updateSizeFilter($event)">
+              @for (size of sizeOptions; track size) {
+                <option [value]="size">{{ size === 'all' ? 'Toutes' : size }}</option>
+              }
+            </select>
+          </div>
+
+          <div class="col-md-2">
+            <label class="form-label fw-semibold">
+              <i class="bi bi-circle-fill me-2"></i>Statut
+            </label>
+            <select 
+              class="form-select"
+              [value]="selectedStatus()"
+              (change)="updateStatusFilter($event)">
+              @for (status of statusOptions; track status) {
+                <option [value]="status">{{ getStatusLabel(status) }}</option>
+              }
+            </select>
+          </div>
+
+          <div class="col-md-1 d-flex align-items-end">
+            <button 
+              type="button"
+              class="btn btn-outline-secondary w-100"
+              (click)="resetFilters()"
+              title="Réinitialiser les filtres">
+              <i class="bi bi-arrow-clockwise"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <p class="text-muted">
+        <strong>{{ filteredFields().length }}</strong> terrain(s) trouvé(s)
+      </p>
+    </div>
+
+    @if (isLoading()) {
+      <div class="text-center py-5">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Chargement...</span>
+        </div>
+        <p class="text-muted mt-3">Chargement des terrains...</p>
+      </div>
+    }
+
+    <!-- Error State -->
+    @if (errorMessage() && !isLoading()) {
+      <div class="alert alert-danger" role="alert">
+        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+        {{ errorMessage() }}
+      </div>
+    }
+
+    @if (!isLoading() && !errorMessage()) {
+      @if (filteredFields().length > 0) {
+        <div class="row g-4">
+          @for (field of filteredFields(); track field.id) {
+            <div class="col-lg-4 col-md-6">
+              <!-- Child Component with @Input and @Output -->
+              <app-field-card 
+                [field]="field"
+                (fieldSelected)="onFieldSelected($event)"
+                (reserveClicked)="onReserveClicked($event)">
+              </app-field-card>
+            </div>
+          }
+        </div>
+      } @else {
+        <!-- No Results -->
+        <div class="text-center py-5">
+          <i class="bi bi-search display-1 text-muted"></i>
+          <h3 class="mt-3 text-muted">Aucun terrain trouvé</h3>
+          <p class="text-muted">Essayez de modifier vos critères de recherche</p>
+          <button 
+            type="button"
+            class="btn btn-primary mt-3"
+            (click)="resetFilters()">
+            <i class="bi bi-arrow-clockwise me-2"></i>
+            Réinitialiser les filtres
+          </button>
+        </div>
+      }
+    }
+  </div>
+</div>

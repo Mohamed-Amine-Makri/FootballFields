@@ -1,0 +1,122 @@
+<footer class="footer bg-dark text-light pt-5 pb-3">
+  <div class="container">
+    <div class="row g-4">
+      <!-- Company Info -->
+      <div class="col-lg-4 col-md-6">
+        <div class="footer-section">
+          <div class="d-flex align-items-center mb-3">
+            <img 
+              src="/assets/logo.png" 
+              alt="Logo" 
+              class="footer-logo me-2"
+              onerror="this.src='https://img.icons8.com/color/48/000000/football2--v1.png'">
+            <h5 class="mb-0 fw-bold">{{ companyInfo.name }}</h5>
+          </div>
+          <p class="text-muted mb-3">{{ companyInfo.description }}</p>
+          
+          <!-- Contact Info -->
+          <div class="contact-info">
+            <div class="d-flex align-items-start mb-2">
+              <i class="bi bi-geo-alt-fill text-primary me-2 mt-1"></i>
+              <span class="text-muted small">{{ companyInfo.address }}</span>
+            </div>
+            <div class="d-flex align-items-center mb-2">
+              <i class="bi bi-telephone-fill text-primary me-2"></i>
+              <a [href]="'tel:' + companyInfo.phone" class="text-muted text-decoration-none small">
+                {{ companyInfo.phone }}
+              </a>
+            </div>
+            <div class="d-flex align-items-center">
+              <i class="bi bi-envelope-fill text-primary me-2"></i>
+              <a [href]="'mailto:' + companyInfo.email" class="text-muted text-decoration-none small">
+                {{ companyInfo.email }}
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Links -->
+      <div class="col-lg-2 col-md-6">
+        <div class="footer-section">
+          <h6 class="fw-bold mb-3 text-uppercase">Liens Rapides</h6>
+          <ul class="list-unstyled">
+            @for (link of quickLinks; track link.name) {
+              <li class="mb-2">
+                <a [routerLink]="link.route" class="footer-link text-muted text-decoration-none">
+                  <i class="bi bi-chevron-right small me-1"></i>
+                  {{ link.name }}
+                </a>
+              </li>
+            }
+          </ul>
+        </div>
+      </div>
+
+      <!-- Legal Links -->
+      <div class="col-lg-3 col-md-6">
+        <div class="footer-section">
+          <h6 class="fw-bold mb-3 text-uppercase">Informations Légales</h6>
+          <ul class="list-unstyled">
+            @for (link of legalLinks; track link.name) {
+              <li class="mb-2">
+                <a [routerLink]="link.route" class="footer-link text-muted text-decoration-none">
+                  <i class="bi bi-chevron-right small me-1"></i>
+                  {{ link.name }}
+                </a>
+              </li>
+            }
+          </ul>
+        </div>
+      </div>
+
+      <!-- Social Media & Newsletter -->
+      <div class="col-lg-3 col-md-6">
+        <div class="footer-section">
+          <h6 class="fw-bold mb-3 text-uppercase">Suivez-nous</h6>
+          <div class="social-links mb-4">
+            @for (social of socialLinks; track social.name) {
+              <a 
+                [href]="social.url" 
+                class="social-link"
+                [attr.aria-label]="social.name"
+                target="_blank">
+                <i [class]="'bi ' + social.icon"></i>
+              </a>
+            }
+          </div>
+
+          <h6 class="fw-bold mb-3 text-uppercase small">Newsletter</h6>
+          <p class="text-muted small mb-2">Restez informé de nos actualités</p>
+          <div class="input-group input-group-sm">
+            <input 
+              type="email" 
+              class="form-control" 
+              placeholder="Votre email"
+              aria-label="Email">
+            <button class="btn btn-primary" type="button">
+              <i class="bi bi-send"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Divider -->
+    <hr class="my-4 border-secondary">
+
+    <!-- Copyright -->
+    <div class="row">
+      <div class="col-md-6 text-center text-md-start">
+        <p class="text-muted small mb-0">
+          &copy; {{ currentYear }} {{ companyInfo.name }}. Tous droits réservés.
+        </p>
+      </div>
+      <div class="col-md-6 text-center text-md-end">
+        <p class="text-muted small mb-0">
+          Développé avec <i class="bi bi-heart-fill text-danger"></i> en Angular
+        </p>
+      </div>
+    </div>
+  </div>
+</footer>

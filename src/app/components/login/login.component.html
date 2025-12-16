@@ -1,0 +1,138 @@
+<div class="login-container">
+  <div class="container">
+    <div class="row justify-content-center align-items-center min-vh-100">
+      <div class="col-md-5 col-lg-4">
+        <div class="card shadow-lg border-0">
+          <div class="card-body p-5">
+            <!-- Logo -->
+            <div class="text-center mb-4">
+              <img src="/assets/logo.png" alt="Football Logo" class="logo mb-3" 
+                   onerror="this.src='https://img.icons8.com/color/96/000000/football2--v1.png'">
+              <h2 class="fw-bold text-primary">Connexion</h2>
+              <p class="text-muted">Accédez à votre compte</p>
+            </div>
+
+            @if (errorMessage()) {
+              <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                {{ errorMessage() }}
+                <button type="button" class="btn-close" (click)="clearError()"></button>
+              </div>
+            }
+
+            <form (ngSubmit)="onSubmit()" #loginForm="ngForm">
+              <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <div class="input-group">
+                  <span class="input-group-text">
+                    <i class="bi bi-envelope"></i>
+                  </span>
+                  <input 
+                    type="email" 
+                    class="form-control" 
+                    id="email"
+                    name="email"
+                    [(ngModel)]="credentials().email"
+                    (input)="updateEmail($event)"
+                    required
+                    email
+                    placeholder="votre@email.com"
+                    [disabled]="isLoading()"
+                    #emailInput="ngModel"
+                    [class.is-invalid]="emailInput.invalid && emailInput.touched">
+                </div>
+                @if (emailInput.invalid && emailInput.touched) {
+                  <div class="text-danger small mt-1">
+                    @if (emailInput.errors?.['required']) {
+                      L'email est requis
+                    }
+                    @if (emailInput.errors?.['email']) {
+                      L'email n'est pas valide
+                    }
+                  </div>
+                }
+              </div>
+
+              <div class="mb-3">
+                <label for="password" class="form-label">Mot de passe</label>
+                <div class="input-group">
+                  <span class="input-group-text">
+                    <i class="bi bi-lock"></i>
+                  </span>
+                  <input 
+                    [type]="showPassword() ? 'text' : 'password'" 
+                    class="form-control" 
+                    id="password"
+                    name="password"
+                    [(ngModel)]="credentials().password"
+                    (input)="updatePassword($event)"
+                    required
+                    minlength="6"
+                    placeholder="••••••••"
+                    [disabled]="isLoading()"
+                    #passwordInput="ngModel"
+                    [class.is-invalid]="passwordInput.invalid && passwordInput.touched">
+                  <button 
+                    class="btn btn-outline-secondary" 
+                    type="button"
+                    (click)="togglePasswordVisibility()"
+                    [disabled]="isLoading()">
+                    <i [class]="showPassword() ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
+                  </button>
+                </div>
+                @if (passwordInput.invalid && passwordInput.touched) {
+                  <div class="text-danger small mt-1">
+                    @if (passwordInput.errors?.['required']) {
+                      Le mot de passe est requis
+                    }
+                    @if (passwordInput.errors?.['minlength']) {
+                      Le mot de passe doit contenir au moins 6 caractères
+                    }
+                  </div>
+                }
+              </div>
+
+              <div class="mb-3 d-flex justify-content-between align-items-center">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="remember">
+                  <label class="form-check-label small" for="remember">
+                    Se souvenir de moi
+                  </label>
+                </div>
+                <a href="#" class="small text-decoration-none">Mot de passe oublié?</a>
+              </div>
+
+              <button 
+                type="submit" 
+                class="btn btn-primary w-100 py-2 mb-3"
+                [disabled]="loginForm.invalid || isLoading()"
+                [class.btn-loading]="isLoading()">
+                @if (isLoading()) {
+                  <span class="spinner-border spinner-border-sm me-2"></span>
+                  Connexion en cours...
+                } @else {
+                  Se connecter
+                }
+              </button>
+
+              <div class="text-center">
+                <p class="text-muted small mb-0">
+                  Vous n'avez pas de compte? 
+                  <a routerLink="/signup" class="text-primary fw-bold text-decoration-none">
+                    S'inscrire
+                  </a>
+                </p>
+              </div>
+            </form>
+
+            <!-- <div class="mt-4 p-3 bg-light rounded">
+              <p class="small mb-2 fw-bold text-muted">Comptes de démonstration:</p>
+              <p class="small mb-1"><strong>Admin:</strong> admin&#64;football.ma / admin123</p>
+              <p class="small mb-0"><strong>User:</strong> ahmed&#64;email.ma / pass123</p>
+            </div> -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

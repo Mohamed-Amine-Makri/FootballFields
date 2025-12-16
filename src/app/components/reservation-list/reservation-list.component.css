@@ -1,0 +1,14 @@
+.reservation-list-container {
+  background-color: #f8f9fa;
+  min-height: calc(100vh - 200px);
+}
+
+.card {
+  border-radius: 15px;
+  border: none;
+  transition: transform 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}

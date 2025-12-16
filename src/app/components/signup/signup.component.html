@@ -1,0 +1,209 @@
+<div class="signup-container">
+  <div class="container">
+    <div class="row justify-content-center align-items-center min-vh-100 py-5">
+      <div class="col-md-6 col-lg-5">
+        <div class="card shadow-lg border-0">
+          <div class="card-body p-5">
+            <!-- Logo -->
+            <div class="text-center mb-4">
+              <img src="/assets/logo.png" alt="Football Logo" class="logo mb-3"
+                   onerror="this.src='https://img.icons8.com/color/96/000000/football2--v1.png'">
+              <h2 class="fw-bold text-primary">Inscription</h2>
+              <p class="text-muted">Créez votre compte</p>
+            </div>
+
+            <!-- Error Alert -->
+            @if (errorMessage()) {
+              <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                {{ errorMessage() }}
+                <button type="button" class="btn-close" (click)="clearMessages()"></button>
+              </div>
+            }
+
+            <!-- Success Alert -->
+            @if (successMessage()) {
+              <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <i class="bi bi-check-circle-fill me-2"></i>
+                {{ successMessage() }}
+              </div>
+            }
+
+            <!-- Signup Form -->
+            <form (ngSubmit)="onSubmit()" #signupForm="ngForm">
+              <!-- Name Fields -->
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label for="firstName" class="form-label">Prénom</label>
+                  <input 
+                    type="text" 
+                    class="form-control" 
+                    id="firstName"
+                    name="firstName"
+                    [(ngModel)]="signupData.firstName"
+                    required
+                    placeholder="Mohammed"
+                    [disabled]="isLoading()"
+                    #firstNameInput="ngModel"
+                    [class.is-invalid]="firstNameInput.invalid && firstNameInput.touched">
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label for="lastName" class="form-label">Nom</label>
+                  <input 
+                    type="text" 
+                    class="form-control" 
+                    id="lastName"
+                    name="lastName"
+                    [(ngModel)]="signupData.lastName"
+                    required
+                    placeholder="Alami"
+                    [disabled]="isLoading()"
+                    #lastNameInput="ngModel"
+                    [class.is-invalid]="lastNameInput.invalid && lastNameInput.touched">
+                </div>
+              </div>
+
+              <!-- Email Input -->
+              <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <div class="input-group">
+                  <span class="input-group-text">
+                    <i class="bi bi-envelope"></i>
+                  </span>
+                  <input 
+                    type="email" 
+                    class="form-control" 
+                    id="email"
+                    name="email"
+                    [(ngModel)]="signupData.email"
+                    required
+                    email
+                    placeholder="votre@email.com"
+                    [disabled]="isLoading()"
+                    #emailInput="ngModel"
+                    [class.is-invalid]="emailInput.invalid && emailInput.touched">
+                </div>
+              </div>
+
+              <!-- Phone Input -->
+              <div class="mb-3">
+                <label for="phone" class="form-label">Téléphone</label>
+                <div class="input-group">
+                  <span class="input-group-text">
+                    <i class="bi bi-telephone"></i>
+                  </span>
+                  <input 
+                    type="tel" 
+                    class="form-control" 
+                    id="phone"
+                    name="phone"
+                    [(ngModel)]="signupData.phone"
+                    required
+                    placeholder="+216 12 345 678"
+                    [disabled]="isLoading()"
+                    #phoneInput="ngModel"
+                    [class.is-invalid]="phoneInput.invalid && phoneInput.touched">
+                </div>
+              </div>
+
+              <!-- Password Input -->
+              <div class="mb-3">
+                <label for="password" class="form-label">Mot de passe</label>
+                <div class="input-group">
+                  <span class="input-group-text">
+                    <i class="bi bi-lock"></i>
+                  </span>
+                  <input 
+                    [type]="showPassword() ? 'text' : 'password'" 
+                    class="form-control" 
+                    id="password"
+                    name="password"
+                    [(ngModel)]="signupData.password"
+                    required
+                    minlength="6"
+                    placeholder="••••••••"
+                    [disabled]="isLoading()"
+                    #passwordInput="ngModel"
+                    [class.is-invalid]="passwordInput.invalid && passwordInput.touched">
+                  <button 
+                    class="btn btn-outline-secondary" 
+                    type="button"
+                    (click)="togglePasswordVisibility()"
+                    [disabled]="isLoading()">
+                    <i [class]="showPassword() ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Confirm Password Input -->
+              <div class="mb-3">
+                <label for="confirmPassword" class="form-label">Confirmer le mot de passe</label>
+                <div class="input-group">
+                  <span class="input-group-text">
+                    <i class="bi bi-lock-fill"></i>
+                  </span>
+                  <input 
+                    [type]="showConfirmPassword() ? 'text' : 'password'" 
+                    class="form-control" 
+                    id="confirmPassword"
+                    name="confirmPassword"
+                    [(ngModel)]="confirmPassword"
+                    required
+                    placeholder="••••••••"
+                    [disabled]="isLoading()"
+                    #confirmPasswordInput="ngModel"
+                    [class.is-invalid]="confirmPasswordInput.touched && signupData.password !== confirmPassword">
+                  <button 
+                    class="btn btn-outline-secondary" 
+                    type="button"
+                    (click)="toggleConfirmPasswordVisibility()"
+                    [disabled]="isLoading()">
+                    <i [class]="showConfirmPassword() ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
+                  </button>
+                </div>
+                @if (confirmPasswordInput.touched && signupData.password !== confirmPassword) {
+                  <div class="text-danger small mt-1">
+                    Les mots de passe ne correspondent pas
+                  </div>
+                }
+              </div>
+
+              <!-- Terms & Conditions -->
+              <div class="mb-3 form-check">
+                <input class="form-check-input" type="checkbox" id="terms" required>
+                <label class="form-check-label small" for="terms">
+                  J'accepte les <a href="#" class="text-primary">conditions d'utilisation</a>
+                </label>
+              </div>
+
+              <!-- Submit Button -->
+              <button 
+                type="submit" 
+                class="btn btn-primary w-100 py-2 mb-3"
+                [disabled]="signupForm.invalid || isLoading()"
+                [class.btn-loading]="isLoading()">
+                @if (isLoading()) {
+                  <span class="spinner-border spinner-border-sm me-2"></span>
+                  Inscription en cours...
+                } @else {
+                  S'inscrire
+                }
+              </button>
+
+              <!-- Login Link -->
+              <div class="text-center">
+                <p class="text-muted small mb-0">
+                  Vous avez déjà un compte? 
+                  <a routerLink="/login" class="text-primary fw-bold text-decoration-none">
+                    Se connecter
+                  </a>
+                </p>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

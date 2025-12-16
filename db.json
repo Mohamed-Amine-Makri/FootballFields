@@ -1,0 +1,350 @@
+{
+  "users": [
+    {
+      "id": "1",
+      "email": "admin@football.com",
+      "password": "admin123",
+      "firstName": "Admin",
+      "lastName": "System",
+      "phone": "+216 20 123 456",
+      "role": "admin",
+      "createdAt": "2025-01-15T10:00:00.000Z"
+    },
+    {
+      "id": "2",
+      "email": "user@football.com",
+      "password": "user123",
+      "firstName": "Mohammed",
+      "lastName": "Ben Ali",
+      "phone": "+216 22 987 654",
+      "role": "user",
+      "createdAt": "2025-02-10T14:30:00.000Z"
+    },
+    {
+      "id": "3",
+      "email": "client@football.com",
+      "password": "client123",
+      "firstName": "Fatima",
+      "lastName": "Trabelsi",
+      "phone": "+216 98 554 433",
+      "role": "user",
+      "createdAt": "2025-03-05T09:15:00.000Z"
+    },
+    {
+      "id": "7926",
+      "email": "aymen@gmail.com",
+      "password": "aymen123",
+      "firstName": "aymen",
+      "lastName": "alami",
+      "phone": "+216 25 132 456",
+      "role": "user",
+      "createdAt": "2025-11-23T22:16:04.639Z"
+    },
+    {
+      "id": "5fb7",
+      "email": "amine@gmail.com",
+      "password": "123456",
+      "firstName": "amine",
+      "lastName": "aminee",
+      "phone": "+216 27 931 493",
+      "role": "user",
+      "createdAt": "2025-12-07T15:21:35.000Z"
+    },
+    {
+      "id": "b678",
+      "email": "aymenayari@gmail.com",
+      "password": "123456",
+      "firstName": "aymen",
+      "lastName": "ayari",
+      "phone": "12345678",
+      "role": "user",
+      "createdAt": "2025-12-11T16:34:27.351Z"
+    },
+    {
+      "id": "b6cb",
+      "email": "mohamed@gmail.com",
+      "password": "pass123",
+      "firstName": "mohamed",
+      "lastName": "amine",
+      "phone": "87654123",
+      "role": "user",
+      "createdAt": "2025-12-12T12:30:32.236Z"
+    }
+  ],
+  "fields": [
+    {
+      "id": "1",
+      "name": "Terrain Central",
+      "type": "grass",
+      "size": "11x11",
+      "pricePerHour": 80,
+      "status": "available",
+      "location": "Tunis, Centre Ville",
+      "description": "Terrain en gazon naturel de haute qualité avec éclairage nocturne",
+      "amenities": [
+        "Éclairage",
+        "Vestiaires",
+        "Douches",
+        "Parking"
+      ],
+      "imageUrl": "https://images.unsplash.com/photo-1459865264687-595d652de67e?w=400",
+      "createdAt": "2025-01-01T08:00:00.000Z"
+    },
+    {
+      "id": "2",
+      "name": "Terrain Synthétique A",
+      "type": "synthetic",
+      "size": "7x7",
+      "pricePerHour": 60,
+      "status": "available",
+      "location": "Sousse, Ville Haute",
+      "description": "Terrain synthétique moderne avec gazon de dernière génération",
+      "amenities": [
+        "Éclairage",
+        "Vestiaires",
+        "Parking"
+      ],
+      "imageUrl": "https://images.unsplash.com/photo-1431324155629-1a6deb1dec8d?w=400",
+      "createdAt": "2025-01-05T10:00:00.000Z"
+    },
+    {
+      "id": "3",
+      "name": "Terrain VIP",
+      "type": "grass",
+      "size": "11x11",
+      "pricePerHour": 120,
+      "status": "available",
+      "location": "Sfax, Centre Ville",
+      "description": "Terrain premium avec tribunes et équipements de luxe",
+      "amenities": [
+        "Éclairage",
+        "Vestiaires",
+        "Douches",
+        "Parking",
+        "Tribunes",
+        "Salle VIP"
+      ],
+      "imageUrl": "https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=400",
+      "createdAt": "2025-01-10T12:00:00.000Z"
+    },
+    {
+      "id": "4",
+      "name": "Terrain Mini-Foot",
+      "type": "synthetic",
+      "size": "5x5",
+      "pricePerHour": 40,
+      "status": "available",
+      "location": "Bizerte, Centre",
+      "description": "Parfait pour les petits groupes et entraînements",
+      "amenities": [
+        "Éclairage",
+        "Vestiaires"
+      ],
+      "imageUrl": "https://images.unsplash.com/photo-1551958219-acbc608c6377?w=400",
+      "createdAt": "2025-01-12T14:00:00.000Z"
+    },
+    {
+      "id": "5",
+      "name": "Terrain Professionnel",
+      "type": "grass",
+      "size": "11x11",
+      "pricePerHour": 150,
+      "status": "maintenance",
+      "location": "Nabeul, Zone Touristique",
+      "description": "Terrain aux normes FIFA pour matchs officiels",
+      "amenities": [
+        "Éclairage",
+        "Vestiaires",
+        "Douches",
+        "Parking",
+        "Tribunes",
+        "Infirmerie"
+      ],
+      "imageUrl": "https://images.unsplash.com/photo-1489944440615-453fc2b6a9a9?w=400",
+      "createdAt": "2025-01-15T16:00:00.000Z"
+    }
+  ],
+  "reservations": [
+    {
+      "id": "1",
+      "fieldId": 1,
+      "userId": 2,
+      "date": "2025-11-25",
+      "startTime": "14:00",
+      "endTime": "16:00",
+      "duration": 2,
+      "totalPrice": 160,
+      "status": "confirmed",
+      "playerCount": 22,
+      "notes": "Match amical entre amis",
+      "createdAt": "2025-11-20T10:30:00.000Z"
+    },
+    {
+      "id": "2",
+      "fieldId": 2,
+      "userId": 3,
+      "date": "2025-11-24",
+      "startTime": "18:00",
+      "endTime": "19:00",
+      "duration": 1,
+      "totalPrice": 60,
+      "status": "confirmed",
+      "playerCount": 14,
+      "notes": "Entraînement hebdomadaire",
+      "createdAt": "2025-11-21T15:45:00.000Z"
+    },
+    {
+      "id": "3",
+      "fieldId": 3,
+      "userId": 2,
+      "date": "2025-11-26",
+      "startTime": "20:00",
+      "endTime": "22:00",
+      "duration": 2,
+      "totalPrice": 240,
+      "status": "pending",
+      "playerCount": 22,
+      "notes": "Tournoi local - finale",
+      "createdAt": "2025-11-22T09:15:00.000Z"
+    },
+    {
+      "id": "4",
+      "fieldId": 4,
+      "userId": 3,
+      "date": "2025-11-23",
+      "startTime": "16:00",
+      "endTime": "17:00",
+      "duration": 1,
+      "totalPrice": 40,
+      "status": "completed",
+      "playerCount": 10,
+      "notes": "Séance d'entraînement technique",
+      "createdAt": "2025-11-15T11:00:00.000Z"
+    },
+    {
+      "id": "8847",
+      "fieldId": "1",
+      "userId": "7926",
+      "date": "2025-11-23",
+      "startTime": "22:00",
+      "endTime": "23:00",
+      "duration": 1,
+      "totalPrice": 80,
+      "status": "pending",
+      "playerCount": 5,
+      "notes": "lkmklmklmkl",
+      "createdAt": "2025-11-23T22:17:14.843Z"
+    },
+    {
+      "id": "6153",
+      "fieldId": 2,
+      "userId": "1",
+      "date": "2025-12-07",
+      "startTime": "19:01",
+      "endTime": "20:01",
+      "duration": 1,
+      "totalPrice": 60,
+      "status": "cancelled",
+      "playerCount": 5,
+      "notes": "",
+      "createdAt": "2025-12-07T15:01:24.165Z"
+    },
+    {
+      "id": "d913",
+      "fieldId": 1,
+      "userId": "5fb7",
+      "date": "2025-12-07",
+      "startTime": "19:22",
+      "endTime": "20:22",
+      "duration": 1,
+      "totalPrice": 80,
+      "status": "pending",
+      "playerCount": 10,
+      "notes": "",
+      "createdAt": "2025-12-07T15:22:40.157Z"
+    },
+    {
+      "id": "6e0a",
+      "fieldId": 3,
+      "userId": "5fb7",
+      "date": "2025-12-07",
+      "startTime": "17:23",
+      "endTime": "18:23",
+      "duration": 1,
+      "totalPrice": 120,
+      "status": "pending",
+      "playerCount": 10,
+      "notes": "",
+      "createdAt": "2025-12-07T15:23:17.525Z"
+    },
+    {
+      "id": "9e1e",
+      "fieldId": 2,
+      "userId": "1",
+      "date": "2025-12-11",
+      "startTime": "18:00",
+      "endTime": "19:00",
+      "duration": 1,
+      "totalPrice": 60,
+      "status": "pending",
+      "playerCount": 10,
+      "notes": "",
+      "createdAt": "2025-12-11T16:48:39.241Z"
+    },
+    {
+      "id": "ee7b",
+      "fieldId": 2,
+      "userId": "1",
+      "date": "2025-12-11",
+      "startTime": "18:00",
+      "endTime": "19:00",
+      "duration": 1,
+      "totalPrice": 60,
+      "status": "pending",
+      "playerCount": 10,
+      "notes": "",
+      "createdAt": "2025-12-11T16:49:50.524Z"
+    },
+    {
+      "id": "33b0",
+      "fieldId": 1,
+      "userId": "1",
+      "date": "2025-12-12",
+      "startTime": "15:18",
+      "endTime": "18:18",
+      "duration": 3,
+      "totalPrice": 240,
+      "status": "pending",
+      "playerCount": 10,
+      "notes": "vbcvb",
+      "createdAt": "2025-12-12T11:18:18.086Z"
+    },
+    {
+      "id": "e186",
+      "fieldId": "1",
+      "userId": "b6cb",
+      "date": "2025-12-12",
+      "startTime": "15:47",
+      "endTime": "18:47",
+      "duration": 3,
+      "totalPrice": 240,
+      "status": "cancelled",
+      "playerCount": 10,
+      "notes": "jgjgjygg",
+      "createdAt": "2025-12-12T12:47:41.346Z"
+    }
+  ],
+  "administrators": [
+    {
+      "id": "1",
+      "userId": 1,
+      "permissions": [
+        "manage_fields",
+        "manage_users",
+        "manage_reservations",
+        "view_reports"
+      ],
+      "assignedAt": "2025-01-01T00:00:00.000Z"
+    }
+  ]
+}

@@ -1,0 +1,125 @@
+<div class="add-reservation-container py-5">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <div class="card shadow-lg border-0">
+          <div class="card-body p-5">
+            <h2 class="fw-bold mb-4">Nouvelle Réservation</h2>
+
+            @if (errorMessage()) {
+              <div class="alert alert-danger">{{ errorMessage() }}</div>
+            }
+            @if (successMessage()) {
+              <div class="alert alert-success">{{ successMessage() }}</div>
+            }
+
+            <form [formGroup]="reservationForm" (ngSubmit)="onSubmit()">
+              <!-- Field Selection -->
+              <div class="mb-3">
+                <label class="form-label fw-semibold">Terrain</label>
+                <select 
+                  class="form-select"
+                  formControlName="fieldId"
+                  (change)="onFieldChange(+$any($event.target).value)">
+                  <option value="">Sélectionnez un terrain</option>
+                  @for (field of fields(); track field.id) {
+                    <option [value]="field.id">
+                      {{ field.name }} - {{ field.pricePerHour }} DT/h
+                    </option>
+                  }
+                </select>
+              </div>
+
+              <!-- Selected Field Info -->
+              @if (selectedField()) {
+                <div class="alert alert-info">
+                  <strong>{{ selectedField()!.name }}</strong><br>
+                  {{ selectedField()!.location }}<br>
+                  Prix: {{ selectedField()!.pricePerHour }} DT/heure
+                </div>
+              }
+
+              <!-- Date and Time -->
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label class="form-label fw-semibold">Date</label>
+                  <input 
+                    type="date" 
+                    class="form-control"
+                    formControlName="date">
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label fw-semibold">Heure de début</label>
+                  <input 
+                    type="time" 
+                    class="form-control"
+                    formControlName="startTime">
+                </div>
+              </div>
+
+              <!-- Duration and Players -->
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label class="form-label fw-semibold">Durée (heures)</label>
+                  <input 
+                    type="number" 
+                    class="form-control"
+                    formControlName="duration"
+                    min="1"
+                    max="8">
+                  @if (reservationForm.get('startTime')?.value) {
+                    <small class="text-muted">
+                      Fin: {{ getEndTime() }}
+                    </small>
+                  }
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label fw-semibold">Nombre de joueurs</label>
+                  <input 
+                    type="number" 
+                    class="form-control"
+                    formControlName="playerCount"
+                    min="2"
+                    max="22">
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label fw-semibold">Notes (optionnel)</label>
+                <textarea 
+                  class="form-control"
+                  rows="3"
+                  formControlName="notes"
+                  placeholder="Informations complémentaires..."></textarea>
+              </div>
+
+              <!-- Price Summary -->
+              @if (selectedField()) {
+                <div class="price-summary p-3 bg-light rounded mb-4">
+                  <div class="d-flex justify-content-between">
+                    <strong>Prix total:</strong>
+                    <h4 class="text-primary mb-0">{{ getTotalPrice() }} DT</h4>
+                  </div>
+                </div>
+              }
+
+              <button 
+                type="submit" 
+                class="btn btn-primary w-100 py-2"
+                [disabled]="reservationForm.invalid || isLoading()">
+                @if (isLoading()) {
+                  <span class="spinner-border spinner-border-sm me-2"></span>
+                  Création en cours...
+                } @else {
+                  Confirmer la réservation
+                }
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
