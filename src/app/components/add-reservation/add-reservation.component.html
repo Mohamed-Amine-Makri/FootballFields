@@ -14,7 +14,6 @@
             }
 
             <form [formGroup]="reservationForm" (ngSubmit)="onSubmit()">
-              <!-- Field Selection -->
               <div class="mb-3">
                 <label class="form-label fw-semibold">Terrain</label>
                 <select 
@@ -30,7 +29,6 @@
                 </select>
               </div>
 
-              <!-- Selected Field Info -->
               @if (selectedField()) {
                 <div class="alert alert-info">
                   <strong>{{ selectedField()!.name }}</strong><br>

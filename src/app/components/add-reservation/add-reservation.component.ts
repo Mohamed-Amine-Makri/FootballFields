@@ -29,7 +29,7 @@ export class AddReservationComponent implements OnInit {
     private reservationService: ReservationService,
     private fieldService: FieldService,
     private authService: AuthService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.initForm();
@@ -44,10 +44,10 @@ export class AddReservationComponent implements OnInit {
     });
   }
 
-  
+
   initForm(): void {
     const today = new Date().toISOString().split('T')[0];
-    
+
     this.reservationForm = this.fb.group({
       fieldId: ['', Validators.required],
       date: [today, Validators.required],
@@ -81,23 +81,26 @@ export class AddReservationComponent implements OnInit {
 
   getTotalPrice(): number {
     if (!this.selectedField()) return 0;
-    const duration = this.reservationForm.get('duration')?.value || 0;
-    return this.selectedField()!.pricePerHour * duration;
+    const duration = Number(this.reservationForm.get('duration')?.value || 0);
+    const price = this.selectedField()!.pricePerHour * duration;
+    return Number(price.toFixed(2));
   }
 
 
   getEndTime(): string {
     const startTime = this.reservationForm.get('startTime')?.value;
     const duration = this.reservationForm.get('duration')?.value || 0;
-    
+
     if (!startTime) return '';
-    
+
     const [hours, minutes] = startTime.split(':').map(Number);
-    const endHours = hours + duration;
-    return `${endHours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+    const totalMinutes = hours * 60 + minutes + duration * 60;
+    const endHours = Math.floor((totalMinutes / 60) % 24);
+    const endMinutes = totalMinutes % 60;
+    return `${endHours.toString().padStart(2, '0')}:${endMinutes.toString().padStart(2, '0')}`;
   }
 
-  
+
   async onSubmit(): Promise<void> {
     if (this.reservationForm.invalid) {
       return;
@@ -110,24 +113,35 @@ export class AddReservationComponent implements OnInit {
     try {
       const user = this.authService.getCurrentUser();
       if (!user) throw new Error('Utilisateur non connecté');
+      const userId = Number(user.id);
+      if (Number.isNaN(userId)) {
+        throw new Error('Identifiant utilisateur invalide.');
+      }
 
       const formValue = this.reservationForm.value;
+      const fieldId = Number(formValue.fieldId);
+      const duration = Number(formValue.duration);
+      const playerCount = Number(formValue.playerCount);
+      if (Number.isNaN(fieldId) || Number.isNaN(duration) || Number.isNaN(playerCount)) {
+        throw new Error('Veuillez vérifier les valeurs saisies.');
+      }
+      const totalPrice = this.getTotalPrice();
       const reservationData = {
-        fieldId: formValue.fieldId,
-        userId: user.id,
+        fieldId,
+        userId,
         date: formValue.date,
         startTime: formValue.startTime,
         endTime: this.getEndTime(),
-        duration: formValue.duration,
-        totalPrice: this.getTotalPrice(),
+        duration,
+        totalPrice,
         status: 'pending' as const,
-        playerCount: formValue.playerCount,
+        playerCount,
         notes: formValue.notes || ''
       };
 
       await this.reservationService.addReservationAsync(reservationData);
       this.successMessage.set('Réservation créée avec succès!');
-      
+
       setTimeout(() => {
         this.router.navigate(['/reservations']);
       }, 1500);

@@ -1,19 +1,17 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Observable, throwError, BehaviorSubject, forkJoin } from 'rxjs';
-import { catchError, map, tap, delay, switchMap } from 'rxjs/operators';
+import { Observable, throwError, BehaviorSubject } from 'rxjs';
+import { catchError, tap, delay } from 'rxjs/operators';
+import { API_ENDPOINTS } from '../config/api.config';
 import { Reservation, ReservationWithDetails } from '../models/reservation.model';
-import { Field } from '../models/field.model';
-import { User } from '../models/user.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ReservationService {
-  private apiUrl = 'http://localhost:3000/reservations';
-  private fieldsUrl = 'http://localhost:3000/fields';
-  private usersUrl = 'http://localhost:3000/users';
-  
+  private reservationsUrl = API_ENDPOINTS.reservations;
+  private reservationsWithDetailsUrl = API_ENDPOINTS.reservationsWithDetails;
+
   private reservationsSubject = new BehaviorSubject<Reservation[]>([]);
   public reservations$ = this.reservationsSubject.asObservable();
 
@@ -28,69 +26,27 @@ export class ReservationService {
   }
 
   getAllReservations(): Observable<Reservation[]> {
-    return this.http.get<Reservation[]>(this.apiUrl)
+    return this.http.get<Reservation[]>(this.reservationsUrl)
       .pipe(
         delay(300),
         catchError(this.handleError)
       );
   }
 
- 
+
   getAllReservationsWithDetails(): Observable<ReservationWithDetails[]> {
-    return this.http.get<Reservation[]>(this.apiUrl)
+    return this.http.get<ReservationWithDetails[]>(this.reservationsWithDetailsUrl)
       .pipe(
         delay(300),
-        switchMap(reservations => {
-          if (reservations.length === 0) {
-            return new Observable<ReservationWithDetails[]>(observer => {
-              observer.next([]);
-              observer.complete();
-            });
-          }
-
-          const detailsObservables = reservations.map(reservation =>
-            forkJoin({
-              field: this.http.get<Field>(`${this.fieldsUrl}/${reservation.fieldId}`),
-              user: this.http.get<User>(`${this.usersUrl}/${reservation.userId}`)
-            }).pipe(
-              map(({ field, user }) => ({
-                ...reservation,
-                fieldName: field.name,
-                userName: `${user.firstName} ${user.lastName}`
-              }))
-            )
-          );
-
-          return forkJoin(detailsObservables);
-        }),
         catchError(this.handleError)
       );
   }
 
- 
+
   getReservationsByUserId(userId: number): Observable<ReservationWithDetails[]> {
-    return this.http.get<Reservation[]>(`${this.apiUrl}?userId=${userId}`)
+    return this.http.get<ReservationWithDetails[]>(`${this.reservationsWithDetailsUrl}?userId=${userId}`)
       .pipe(
         delay(300),
-        switchMap(reservations => {
-          if (reservations.length === 0) {
-            return new Observable<ReservationWithDetails[]>(observer => {
-              observer.next([]);
-              observer.complete();
-            });
-          }
-
-          const detailsObservables = reservations.map(reservation =>
-            this.http.get<Field>(`${this.fieldsUrl}/${reservation.fieldId}`).pipe(
-              map(field => ({
-                ...reservation,
-                fieldName: field.name
-              }))
-            )
-          );
-
-          return forkJoin(detailsObservables);
-        }),
         catchError(this.handleError)
       );
   }
@@ -99,7 +55,7 @@ export class ReservationService {
    * Get reservations by field ID
    */
   getReservationsByFieldId(fieldId: number): Observable<Reservation[]> {
-    return this.http.get<Reservation[]>(`${this.apiUrl}?fieldId=${fieldId}`)
+    return this.http.get<Reservation[]>(`${this.reservationsUrl}?fieldId=${fieldId}`)
       .pipe(
         delay(300),
         catchError(this.handleError)
@@ -110,7 +66,7 @@ export class ReservationService {
    * Get reservation by ID
    */
   getReservationById(id: number): Observable<Reservation> {
-    return this.http.get<Reservation>(`${this.apiUrl}/${id}`)
+    return this.http.get<Reservation>(`${this.reservationsUrl}${id}/`)
       .pipe(
         delay(200),
         catchError(this.handleError)
@@ -121,12 +77,7 @@ export class ReservationService {
    * Add new reservation
    */
   addReservation(reservation: Omit<Reservation, 'id' | 'createdAt'>): Observable<Reservation> {
-    const newReservation = {
-      ...reservation,
-      createdAt: new Date().toISOString()
-    };
-
-    return this.http.post<Reservation>(this.apiUrl, newReservation)
+    return this.http.post<Reservation>(this.reservationsUrl, reservation)
       .pipe(
         tap(reservation => {
           const currentReservations = this.reservationsSubject.value;
@@ -152,7 +103,7 @@ export class ReservationService {
    * Update reservation
    */
   updateReservation(id: number, reservation: Partial<Reservation>): Observable<Reservation> {
-    return this.http.patch<Reservation>(`${this.apiUrl}/${id}`, reservation)
+    return this.http.patch<Reservation>(`${this.reservationsUrl}${id}/`, reservation)
       .pipe(
         tap(updatedReservation => {
           const currentReservations = this.reservationsSubject.value;
@@ -177,7 +128,7 @@ export class ReservationService {
    * Delete reservation
    */
   deleteReservation(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`)
+    return this.http.delete<void>(`${this.reservationsUrl}${id}/`)
       .pipe(
         tap(() => {
           const currentReservations = this.reservationsSubject.value;
@@ -211,14 +162,20 @@ export class ReservationService {
    */
   private handleError(error: HttpErrorResponse): Observable<never> {
     let errorMessage = 'Une erreur est survenue lors de l\'opération';
-    
+
     if (error.error instanceof ErrorEvent) {
       errorMessage = `Erreur: ${error.error.message}`;
+    } else if (error.status === 400 && error.error) {
+      if (typeof error.error === 'string') {
+        errorMessage = error.error;
+      } else {
+        errorMessage = JSON.stringify(error.error);
+      }
     } else {
       errorMessage = `Code d'erreur: ${error.status}\nMessage: ${error.message}`;
     }
-    
-    console.error('ReservationService Error:', errorMessage);
+
+    console.error('ReservationService Error:', errorMessage, error.error);
     return throwError(() => new Error(errorMessage));
   }
 }

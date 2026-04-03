@@ -2,18 +2,19 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, delay } from 'rxjs/operators';
+import { API_ENDPOINTS } from '../config/api.config';
 import { User } from '../models/user.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
-  private apiUrl = 'http://localhost:3000/users';
+  private usersUrl = API_ENDPOINTS.users;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   getAllUsers(): Observable<User[]> {
-    return this.http.get<User[]>(this.apiUrl)
+    return this.http.get<User[]>(this.usersUrl)
       .pipe(
         delay(300),
         catchError(this.handleError)
@@ -22,7 +23,7 @@ export class UserService {
 
 
   getUserById(id: number): Observable<User> {
-    return this.http.get<User>(`${this.apiUrl}/${id}`)
+    return this.http.get<User>(`${this.usersUrl}${id}/`)
       .pipe(
         delay(200),
         catchError(this.handleError)
@@ -31,7 +32,7 @@ export class UserService {
 
 
   updateUser(id: number, user: Partial<User>): Observable<User> {
-    return this.http.patch<User>(`${this.apiUrl}/${id}`, user)
+    return this.http.patch<User>(`${this.usersUrl}${id}/`, user)
       .pipe(
         catchError(this.handleError)
       );
@@ -39,7 +40,7 @@ export class UserService {
 
 
   deleteUser(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`)
+    return this.http.delete<void>(`${this.usersUrl}${id}/`)
       .pipe(
         catchError(this.handleError)
       );
@@ -48,13 +49,13 @@ export class UserService {
 
   private handleError(error: HttpErrorResponse): Observable<never> {
     let errorMessage = 'Une erreur est survenue lors de l\'opération';
-    
+
     if (error.error instanceof ErrorEvent) {
       errorMessage = `Erreur: ${error.error.message}`;
     } else {
       errorMessage = `Code d'erreur: ${error.status}\nMessage: ${error.message}`;
     }
-    
+
     console.error('UserService Error:', errorMessage);
     return throwError(() => new Error(errorMessage));
   }

@@ -68,9 +68,7 @@ export class FieldDetailsComponent implements OnInit {
     });
   }
 
-  /**
-   * Get status class
-   */
+ 
   getStatusClass(): string {
     const status = this.field()?.status;
     switch (status) {
@@ -81,9 +79,7 @@ export class FieldDetailsComponent implements OnInit {
     }
   }
 
-  /**
-   * Get status text
-   */
+ 
   getStatusText(): string {
     const status = this.field()?.status;
     switch (status) {

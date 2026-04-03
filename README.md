@@ -2,15 +2,23 @@
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.19.
 
-## Development server
+## Development servers
 
-To start a local development server, run:
+This workspace now relies on the Django backend located in `../backend_foot`.
 
-```bash
-ng serve
-```
+1. **Start the API (terminal #1):**
+	```powershell
+	cd ..\backend_foot
+	python manage.py runserver 8000
+	```
+	The REST endpoints are exposed at `http://localhost:8000/api`.
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+2. **Start the Angular dev server (terminal #2):**
+	```bash
+	ng serve
+	```
+
+Once the Angular server is running, open your browser and navigate to `http://localhost:4200/`. The application automatically reloads whenever you modify any of the source files.
 
 ## Code scaffolding
 

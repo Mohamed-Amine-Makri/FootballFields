@@ -2,13 +2,14 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError, BehaviorSubject } from 'rxjs';
 import { catchError, map, tap, delay } from 'rxjs/operators';
+import { API_ENDPOINTS } from '../config/api.config';
 import { Field } from '../models/field.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FieldService {
-  private apiUrl = 'http://localhost:3000/fields';
+  private fieldsUrl = API_ENDPOINTS.fields;
   private fieldsSubject = new BehaviorSubject<Field[]>([]);
   public fields$ = this.fieldsSubject.asObservable();
 
@@ -24,7 +25,7 @@ export class FieldService {
 
 
   getAllFields(): Observable<Field[]> {
-    return this.http.get<Field[]>(this.apiUrl)
+    return this.http.get<Field[]>(this.fieldsUrl)
       .pipe(
         delay(300),
         catchError(this.handleError)
@@ -34,7 +35,7 @@ export class FieldService {
 
   getAllFieldsAsync(): Promise<Field[]> {
     return new Promise((resolve, reject) => {
-      this.http.get<Field[]>(this.apiUrl)
+      this.http.get<Field[]>(this.fieldsUrl)
         .pipe(
           delay(300),
           catchError(this.handleError)
@@ -50,7 +51,7 @@ export class FieldService {
    * Get field by ID
    */
   getFieldById(id: number): Observable<Field> {
-    return this.http.get<Field>(`${this.apiUrl}/${id}`)
+    return this.http.get<Field>(`${this.fieldsUrl}${id}/`)
       .pipe(
         delay(200),
         catchError(this.handleError)
@@ -62,7 +63,7 @@ export class FieldService {
    */
   getFieldByIdAsync(id: number): Promise<Field> {
     return new Promise((resolve, reject) => {
-      this.http.get<Field>(`${this.apiUrl}/${id}`)
+      this.http.get<Field>(`${this.fieldsUrl}${id}/`)
         .pipe(
           delay(200),
           catchError(this.handleError)
@@ -83,7 +84,7 @@ export class FieldService {
       createdAt: new Date().toISOString()
     };
 
-    return this.http.post<Field>(this.apiUrl, newField)
+    return this.http.post<Field>(this.fieldsUrl, newField)
       .pipe(
         tap(field => {
           const currentFields = this.fieldsSubject.value;
@@ -109,7 +110,7 @@ export class FieldService {
    * Update field
    */
   updateField(id: number, field: Partial<Field>): Observable<Field> {
-    return this.http.patch<Field>(`${this.apiUrl}/${id}`, field)
+    return this.http.patch<Field>(`${this.fieldsUrl}${id}/`, field)
       .pipe(
         tap(updatedField => {
           const currentFields = this.fieldsSubject.value;
@@ -123,9 +124,9 @@ export class FieldService {
       );
   }
 
- 
+
   deleteField(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`)
+    return this.http.delete<void>(`${this.fieldsUrl}${id}/`)
       .pipe(
         tap(() => {
           const currentFields = this.fieldsSubject.value;
@@ -135,7 +136,7 @@ export class FieldService {
       );
   }
 
- 
+
   deleteFieldAsync(id: number): Promise<void> {
     return new Promise((resolve, reject) => {
       this.deleteField(id).subscribe({
@@ -176,13 +177,13 @@ export class FieldService {
    */
   private handleError(error: HttpErrorResponse): Observable<never> {
     let errorMessage = 'Une erreur est survenue lors de l\'opération';
-    
+
     if (error.error instanceof ErrorEvent) {
       errorMessage = `Erreur: ${error.error.message}`;
     } else {
       errorMessage = `Code d'erreur: ${error.status}\nMessage: ${error.message}`;
     }
-    
+
     console.error('FieldService Error:', errorMessage);
     return throwError(() => new Error(errorMessage));
   }

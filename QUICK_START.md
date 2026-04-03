@@ -9,12 +9,16 @@ npm install
 
 ### Ouvrir 2 terminaux PowerShell
 
-**Terminal 1 - API Server:**
+**Terminal 1 - API Django:**
 ```powershell
-cd c:\Users\makri\Desktop\project_angular\project_foot
-npm run api
+cd c:\Users\makri\Desktop\project_angular\backend_foot
+python -m venv .venv            # première fois uniquement
+.\.venv\Scripts\activate      # activer l'environnement
+pip install -r requirements.txt # première fois uniquement
+python manage.py migrate        # s'assurer que le schéma est à jour
+python manage.py runserver 8000
 ```
-✅ API démarre sur http://localhost:3000
+✅ API disponible sur http://localhost:8000/api
 
 **Terminal 2 - Angular App:**
 ```powershell
@@ -51,7 +55,7 @@ Accédez à: **http://localhost:4200**
 - ✅ Authentification + Guards
 - ✅ Routing avec lazy loading
 - ✅ Bootstrap 5 intégré
-- ✅ Base de données JSON
+- ✅ Backend Django REST + PostgreSQL
 - ✅ Signals + RxJS
 - ✅ Forms (template & reactive)
 

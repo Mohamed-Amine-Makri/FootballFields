@@ -11,7 +11,7 @@ Application Angular complète de gestion de terrains de football avec authentifi
 - ✅ Signals pour la gestion d'état réactive
 - ✅ Pipes personnalisés
 - ✅ Forms (template-driven et reactive)
-- ✅ Base de données JSON avec json-server
+- ✅ API Django REST (backend_foot) avec PostgreSQL
 - ✅ Gestion d'erreurs
 - ✅ Bootstrap 5 pour le styling
 - ✅ Contrôles de flux (@for, @if, @switch)
@@ -31,16 +31,22 @@ npm install
 
 ## 🏃 Lancement de l'Application
 
-L'application nécessite deux serveurs en parallèle :
+L'application nécessite deux serveurs en parallèle : l'API Django (backend_foot) et le front Angular.
 
-### Terminal 1 : Démarrer le serveur API (json-server)
+### Terminal 1 : Démarrer l'API Django
 ```powershell
-npm run api
+cd ..\backend_foot
+python -m venv .venv            # première fois uniquement
+.\.venv\Scripts\activate      # active l'environnement virtuel
+pip install -r requirements.txt # première fois uniquement
+python manage.py migrate        # s'assurer que la base est à jour
+python manage.py runserver 8000
 ```
-Le serveur JSON démarre sur `http://localhost:3000`
+L'API REST est accessible sur `http://localhost:8000/api`
 
 ### Terminal 2 : Démarrer l'application Angular
 ```powershell
+cd ..\project_foot
 npm start
 ```
 L'application démarre sur `http://localhost:4200`
@@ -99,7 +105,7 @@ src/app/
 │
 └── app.routes.ts       # Configuration des routes
 
-db.json                 # Base de données JSON (mock API)
+> ℹ️  L'API Django (dossier `backend_foot/`) expose les mêmes entités (`users`, `fields`, `reservations`). Reportez-vous à `backend_foot/README.md` pour la configuration serveur.
 ```
 
 ## 🎯 Fonctionnalités Principales
@@ -251,13 +257,15 @@ private handleError(operation: string) {
 }
 ```
 
-## 📊 Base de Données (db.json)
+## 🌐 API Backend (Django + PostgreSQL)
 
-La base de données contient :
-- **users** : 3 utilisateurs de test
-- **fields** : 5 terrains de football
-- **reservations** : 4 réservations exemple
-- **administrators** : 1 compte admin
+Le dossier `backend_foot/` contient l'API officielle :
+- Django 6 + Django REST Framework
+- PostgreSQL (`foot_db`) pour stocker les utilisateurs, terrains et réservations
+- Endpoints disponibles sur `http://localhost:8000/api`
+- Points d'entrée dédiés pour l'authentification : `/api/auth/login/` et `/api/auth/signup/`
+
+Les comptes de test listés plus haut sont déjà fournis dans la base de données. Utilisez `python manage.py createsuperuser` pour ajouter un administrateur supplémentaire si nécessaire.
 
 ## 🎨 Styling
 
@@ -269,33 +277,38 @@ Le projet utilise :
 ## 🔧 Scripts Disponibles
 
 ```powershell
-npm start           # Démarrer l'application Angular (port 4200)
-npm run api         # Démarrer json-server (port 3000)
-npm run build       # Build de production
-npm test            # Lancer les tests
+cd ..\backend_foot
+python manage.py runserver 8000   # Démarrer l'API Django (port 8000)
+
+cd ..\project_foot
+npm start                         # Démarrer l'application Angular (port 4200)
+npm run build                     # Build de production
+npm test                          # Lancer les tests
 ```
 
 ## 📝 Notes Importantes
 
-1. **Deux serveurs requis** : L'API (json-server) et l'application Angular doivent tourner simultanément
-2. **Port 3000** : json-server doit être accessible sur http://localhost:3000
-3. **Port 4200** : Application Angular accessible sur http://localhost:4200
-4. **Données persistantes** : Les modifications sont sauvegardées dans db.json
+1. **Deux serveurs requis** : L'API Django (`http://localhost:8000/api`) et l'application Angular (`http://localhost:4200`) doivent tourner simultanément
+2. **Base de données** : PostgreSQL `foot_db` (cf. `backendFoot/settings.py`) doit être accessible
+3. **Migrations** : exécutez `python manage.py migrate` dès qu'un nouveau modèle est ajouté
+4. **Données persistantes** : Les modifications sont stockées dans PostgreSQL (plus de `db.json`)
 
 ## ❓ Problèmes Courants
 
 ### Le serveur API ne démarre pas
-```powershell
-# Vérifier si le port 3000 est déjà utilisé
-netstat -ano | findstr :3000
-
-# Tuer le processus si nécessaire
-taskkill /PID <PID> /F
-```
+- Vérifiez que PostgreSQL est en cours d'exécution et que les identifiants correspondent à `backendFoot/settings.py`
+- Activez le virtualenv (`.\.venv\Scripts\activate`) avant de lancer `python manage.py runserver`
+- Si le port 8000 est occupé :
+  ```powershell
+  netstat -ano | findstr :8000
+  taskkill /PID <PID> /F
+  ```
+- Lancez `python manage.py check` pour détecter les erreurs de configuration
 
 ### L'application Angular ne se connecte pas à l'API
-- Vérifier que json-server tourne sur le port 3000
-- Vérifier la console navigateur pour les erreurs CORS
+- Vérifiez que `python manage.py runserver 8000` tourne dans `backend_foot`
+- Confirmez que l'URL `http://localhost:8000/api/users/` est accessible dans le navigateur
+- Surveillez la console navigateur pour les erreurs CORS ou HTTP et consultez les logs Django
 
 ### Erreurs de compilation
 ```powershell
@@ -318,7 +331,7 @@ Pour toute question sur le projet, référez-vous aux commentaires dans le code 
 - [x] Bootstrap intégré
 - [x] Services en mode async (Observable + Promise)
 - [x] Pipes personnalisés (3 pipes)
-- [x] Base de données JSON
+- [x] API Django REST + PostgreSQL
 - [x] Contrôles de flux (@for, @if, @switch)
 - [x] Observables et RxJS
 - [x] Gestion d'erreurs
